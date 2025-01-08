@@ -1,0 +1,93 @@
+*esrunner.nvim* Execute scripts for Adobe apps from within Neovim.
+
+==============================================================================
+
+|esrunner.nvim| is a plugin for running ExtendScript scripts for Adobe
+applications from within Neovim.
+ 
+
+Features:
+    - Can detect app specifiers (specific app, version, etc.)
+    - Run either entire buffer or only selected lines
+    - Helper functions for finding and validating application paths
+
+esrunner.setup({opts})                                      *esrunner.setup()*
+    Setup function to be run by user. Configures the defaults, and application
+    targets .
+
+    Usage:
+    >
+    require("esrunner").setup{
+      defaults = {
+        -- Default configuration for esrunner goes here:
+        -- config_key = value,
+        -- ..
+      },
+      apps = {
+        -- Configuration for system applications goes here:
+        -- application_name = {
+        --   application_config_key = value,
+        --   ...
+        -- }
+      }
+    }
+<
+    Valid keys for {opts.defaults}
+
+                                 *esrunner.defaults.execute_on_single_matches*
+    execute_on_single_matches: ~
+        Skip the `vim.ui.select` prompt on exact app version match (or when
+	only a single app is available to pick).
+        
+	Default: false
+
+    Required keys for {opts.apps}
+
+    path: ~
+	The file system path to your application.
+
+	NOTE: Most often, Adobe applications are installed into either the
+	base Application directory `/Application/` or your user Application
+	directory `~/Applications/`.
+
+    version: ~
+	The version identifer (e.g. 24.6.4) of the app.
+
+    Example Application Configuration:
+>
+    ["Adobe Illustrator 2025"] = {
+      path = "/Applications/Adobe Illustrator 2025/Adobe Illustrator.app",
+      version = "29.1.0",
+    }
+
+    NOTE: Multiple versions of the same app can be configured
+
+==============================================================================
+COMMANDS                                                   *esrunner.commands*
+
+`:ESRunner run` (or just `:ESRunner`) will present a |vim.ui.select| prompt
+allowing you to pick a pre-configured application to execute code from the
+current buffer. If the commands is executed in |visual| mode, only the
+selected code will be executed.
+
+NOTE: If a `target name` specifier is found in the script the the available
+apps to choose from will be limited to any matching the specifier. If a
+`version` is also specified and a matching application version is defined in
+your config, ESRunner will skip the application select prompt and immediately
+execute the script in the specified app. You can disable this behavior (see
+|esrunner.defaults.execute_on_single_matches|).
+
+Reference Links:
+https://extendscript.docsforadobe.dev/extendscript-tools-features\
+/preprocessor-directives.html?highlight=target#target-name
+https://extendscript.docsforadobe.dev/interapplication-communication\
+/application-and-namespace-specifiers.html#application-specifiers
+
+`:ESRunner find_apps` uses the Apple System Profiler to find any supported
+application installed on your system. This cna be helpful if you are unsure of
+the installation path of your application.
+
+`:ESRunner validate_apps` ensures your |esrunner.setup| configured application
+paths are correct.
+
+ vim:tw=78:ts=8:noet:ft=help:norl:
