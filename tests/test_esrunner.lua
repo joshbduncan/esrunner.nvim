@@ -125,4 +125,59 @@ T["generate system apps table"] = new_set({}, {
 	end,
 })
 
+T["config validation"] = new_set({
+	hooks = custom_hooks,
+}, {
+	["valid config does not error"] = function()
+		child.lua([[
+            M.setup({
+                apps = {
+                    ["Test App"] = { path = "/test.app", version = "1.0" },
+                },
+            })
+        ]])
+	end,
+	["missing apps errors"] = function()
+		expect.error(function()
+			child.lua([[M.setup({})]])
+		end)
+	end,
+	["missing path errors"] = function()
+		expect.error(function()
+			child.lua([[
+                M.setup({
+                    apps = {
+                        ["Test App"] = { version = "1.0" },
+                    },
+                })
+            ]])
+		end)
+	end,
+	["missing version errors"] = function()
+		expect.error(function()
+			child.lua([[
+                M.setup({
+                    apps = {
+                        ["Test App"] = { path = "/test.app" },
+                    },
+                })
+            ]])
+		end)
+	end,
+	["wrong type for apps errors"] = function()
+		expect.error(function()
+			child.lua([[M.setup({ apps = "not a table" })]])
+		end)
+	end,
+})
+
+T["health check"] = new_set({
+	hooks = custom_hooks,
+}, {
+	["check function exists"] = function()
+		local result = child.lua_get("type(require('esrunner.health').check)")
+		eq(result, "function")
+	end,
+})
+
 return T
