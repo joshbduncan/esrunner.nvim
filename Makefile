@@ -14,3 +14,7 @@ deps/mini.nvim:
 # Run StyLua
 format:
 	stylua lua/ plugin/
+
+# Check formatting with StyLua without applying changes
+lint:
+	stylua --check lua/ plugin/
