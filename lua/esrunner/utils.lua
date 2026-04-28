@@ -182,7 +182,8 @@ utils.execute_in_target_app = function(target, script)
 	end
 
 	if cmd == nil then
-		error(string.format("Target '%s' not found.", target), vim.log.levels.ERROR)
+		vim.notify(string.format("Target '%s' not found.", target), vim.log.levels.ERROR)
+		return
 	end
 
 	-- execute the script with a system command
@@ -205,7 +206,7 @@ utils.execute_in_target_app = function(target, script)
 	local exit_code = job["code"]
 
 	if exit_code ~= 0 and error_result ~= "" then
-		error(error_result, vim.log.levels.ERROR)
+		vim.notify(error_result, vim.log.levels.ERROR)
 	end
 end
 

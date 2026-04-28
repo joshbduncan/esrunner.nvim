@@ -29,10 +29,12 @@ commands.run_script = function(range)
 		-- validate the current buffer
 		local is_modified = vim.api.nvim_get_option_value("modified", { buf = 0 })
 		if is_modified then
-			error("Buffer has unsaved changes", vim.log.levels.ERROR)
+			vim.notify("Buffer has unsaved changes", vim.log.levels.ERROR)
+			return
 		end
 		if not utils.valid_filetype() then
-			error("Buffer has unsaved changes", vim.log.levels.ERROR)
+			vim.notify("Buffer has unsaved changes", vim.log.levels.ERROR)
+			return
 		end
 	end
 
@@ -48,7 +50,11 @@ commands.run_script = function(range)
 		local appname, instance, version, locale = utils.parse_target_specifier(target_specifier)
 
 		if appname == nil or not utils.validate_target_specifier(appname) then
-			error(string.format("Invalid target '%s'. See `:help esrunner.targets`.", appname), vim.log.levels.ERROR)
+			vim.notify(
+				string.format("Invalid target '%s'. See `:help esrunner.targets`.", appname),
+				vim.log.levels.ERROR
+			)
+			return
 		end
 
 		choices = utils.match_target_specifier_to_app(appname, version)
@@ -76,7 +82,8 @@ commands.find_apps = function()
 		-- ensure we got an actual xml file
 		local plist_check = string.find(data, '<plist version="1.0">.*</plist>')
 		if data == "" or plist_check == nil then
-			error("Error reading system_profiler data.", vim.log.levels.ERROR)
+			vim.notify("Error reading system_profiler data.", vim.log.levels.ERROR)
+			return {}
 		end
 
 		-- determine where to start searching
