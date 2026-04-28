@@ -161,8 +161,20 @@ commands.find_apps = function()
 	local utils = require("esrunner.utils")
 	local app_report = utils.generate_system_apps_table(app_data)
 
+	local lines = {}
+	local names = vim.tbl_keys(app_report)
+	table.sort(names)
+	for _, name in ipairs(names) do
+		local app = app_report[name]
+		table.insert(lines, string.format('    ["%s"] = {', name))
+		table.insert(lines, string.format('        path = "%s",', app.path))
+		table.insert(lines, string.format('        version = "%s",', app.version))
+		table.insert(lines, "    },")
+	end
+
 	local buf = vim.api.nvim_create_buf(true, true)
-	vim.api.nvim_buf_set_lines(buf, 0, -1, false, vim.split(vim.inspect(app_report), "\n"))
+	vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+	vim.bo[buf].filetype = "lua"
 	vim.api.nvim_win_set_buf(0, buf)
 end
 
