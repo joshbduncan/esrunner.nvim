@@ -1,6 +1,6 @@
 local M = {}
 
-M["version"] = "0.1.0"
+M["version"] = "0.2.0"
 
 ---Setup user configuration options
 ---@param opts ESRunnerOpts
