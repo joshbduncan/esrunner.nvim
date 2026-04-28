@@ -187,15 +187,9 @@ utils.execute_in_target_app = function(target, script)
 	end
 
 	-- execute the script with a system command
-	local result = ""
 	local error_result = ""
 	local job = vim.system(cmd, {
 		text = true,
-		stdout = function(_, data)
-			if data then
-				result = result .. data
-			end
-		end,
 		stderr = function(_, data)
 			if data then
 				error_result = error_result .. data
