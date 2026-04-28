@@ -137,10 +137,8 @@ T["config validation"] = new_set({
             })
         ]])
 	end,
-	["missing apps errors"] = function()
-		expect.error(function()
-			child.lua([[M.setup({})]])
-		end)
+	["missing apps does not error"] = function()
+		child.lua([[M.setup({})]])
 	end,
 	["missing path errors"] = function()
 		expect.error(function()
@@ -168,6 +166,11 @@ T["config validation"] = new_set({
 		expect.error(function()
 			child.lua([[M.setup({ apps = "not a table" })]])
 		end)
+	end,
+	["missing apps notifies and returns"] = function()
+		child.lua([[M.setup({})]])
+		local config = child.lua_get("require('esrunner.config').apps")
+		eq(config, {})
 	end,
 })
 
