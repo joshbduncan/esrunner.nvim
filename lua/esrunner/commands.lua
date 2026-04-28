@@ -47,7 +47,7 @@ commands.run_script = function(range)
 		-- extract all specifiers
 		-- https://extendscript.docsforadobe.dev/interapplication-communication/application-and-namespace-specifiers.html#application-and-namespace-specifiers
 		local target_specifier = string.match(content[1], "^%s*[%p/]*target%s+(%S+)")
-		local appname, instance, version, locale = utils.parse_target_specifier(target_specifier)
+		local appname, _, version, _ = utils.parse_target_specifier(target_specifier)
 
 		if appname == nil or not utils.validate_target_specifier(appname) then
 			vim.notify(
