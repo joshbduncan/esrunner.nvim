@@ -12,6 +12,15 @@ config.options = {}
 config.apps = {}
 
 config.set_options = function(opts)
+	-- validate top-level opts
+	vim.validate({ apps = { opts.apps, "table" } })
+	for name, app in pairs(opts.apps) do
+		vim.validate({
+			[name .. ".path"] = { app.path, "string" },
+			[name .. ".version"] = { app.version, "string" },
+		})
+	end
+
 	-- set defaults
 	local defaults = vim.F.if_nil(config.defaults, {})
 	local user_defaults = vim.F.if_nil(opts.defaults, {})
