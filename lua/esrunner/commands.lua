@@ -33,7 +33,7 @@ commands.run_script = function(range)
 			return
 		end
 		if not utils.valid_filetype() then
-			vim.notify("Buffer has unsaved changes", vim.log.levels.ERROR)
+			vim.notify("Not a valid ExtendScript filetype", vim.log.levels.ERROR)
 			return
 		end
 	end
