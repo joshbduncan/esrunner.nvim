@@ -1,7 +1,7 @@
 local utils = {}
 
 ---Save `lines` to a temporary file.
----@param lines table Lines to save
+---@param lines string[] Lines to save
 ---@return string # Path of temporary file
 utils.save_temp_file = function(lines)
 	-- make a new scratch buffer and set it contents
@@ -29,7 +29,7 @@ end
 ---Application Specifier Details: https://extendscript.docsforadobe.dev/interapplication-communication/application-and-namespace-specifiers.html#application-specifiers
 ---@param start number First line index
 ---@param end_ number Last line index (exclusive)
----@return number # Line number of target application specifier (or -1 if none found)
+---@return number # Line number of target application specifier (0 if none found)
 utils.check_for_target = function(start, end_)
 	-- setup the regex pattern
 	local pattern = "\\(\\/\\/@\\|#\\)target"
@@ -89,7 +89,7 @@ end
 ---Find all valid app paths that match an app target identifier.
 ---@param appname string Target app specifier to match with
 ---@param version string|nil Target app version specifier
----@return table # Matching apps
+---@return string[] # Matching app names
 function utils.match_target_specifier_to_app(appname, version)
 	local compare_versions = function(v1, v2)
 		-- split the version strings into components
@@ -139,7 +139,7 @@ function utils.match_target_specifier_to_app(appname, version)
 end
 
 ---Pick target app for script execution.
----@param apps table App choices to pick from
+---@param apps string[] App name choices to pick from
 ---@param fp string File path of script to execute in selected app
 utils.pick_app = function(apps, fp)
 	if vim.tbl_isempty(apps) then
@@ -219,8 +219,8 @@ utils.validate_app_directory = function(fp)
 end
 
 ---Generate a sample table of supported apps found on the system
----@param apps table Supported applications found on the system { name, path, version }
----@return table # System apps table
+---@param apps string[][] Supported applications found on the system { name, path, version }
+---@return table<string, ESRunnerApp> # System apps table
 utils.generate_system_apps_table = function(apps)
 	table.sort(apps, function(a, b)
 		return a[1] < b[1]

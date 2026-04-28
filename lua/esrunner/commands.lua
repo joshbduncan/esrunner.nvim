@@ -1,7 +1,7 @@
 local commands = {}
 
 ---Execute an ESRunner command
----@param range table Visual selection range { start_line, end_line }
+---@param range integer[] Visual selection range { start_line, end_line }
 ---@param command string Command to execute. Defaults to 'run'.
 commands.execute = function(range, command)
 	command = command or "run"
@@ -15,7 +15,7 @@ commands.execute = function(range, command)
 end
 
 ---Execute the current buffer or a range of lines.
----@param range table Visual selection range { start_line, end_line }
+---@param range integer[] Visual selection range { start_line, end_line }
 commands.run_script = function(range)
 	local utils = require("esrunner.utils")
 	local s, e = 1, vim.api.nvim_buf_line_count(0)
@@ -72,7 +72,7 @@ end
 commands.find_apps = function()
 	---Process System Profiler XML Data
 	---@param data string System Profiler XML Data
-	---@return table # Extracted application paths
+	---@return string[][] # Extracted application paths { name, path, version }
 	local process_system_profiler_xml = function(data)
 		local targets = {}
 		for _, value in pairs(require("esrunner.config").targets) do

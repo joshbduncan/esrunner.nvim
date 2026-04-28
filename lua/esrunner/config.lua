@@ -1,3 +1,18 @@
+---@class ESRunnerApp
+---@field path string Full path to the .app package
+---@field version string Application version string (e.g. "29.1.0")
+
+---@class ESRunnerDefaults
+---@field execute_on_single_matches? boolean Auto-execute when only one app matches (default: true)
+
+---@class ESRunnerOpts
+---@field apps table<string, ESRunnerApp>
+---@field defaults? ESRunnerDefaults
+
+---@class ESRunnerTarget
+---@field app string Substring matched against user-configured app names
+---@field cmd fun(target: string, script: string): string[] Shell command to invoke the app
+
 local config = {}
 
 -- plugin option defaults
@@ -5,12 +20,13 @@ config.defaults = {
 	["execute_on_single_matches"] = true,
 }
 
--- table to hold configuration options
+---@type table<string, boolean>
 config.options = {}
 
--- table to hold user config app paths
+---@type table<string, ESRunnerApp>
 config.apps = {}
 
+---@param opts ESRunnerOpts
 config.set_options = function(opts)
 	-- validate top-level opts
 	vim.validate({ apps = { opts.apps, "table" } })
@@ -35,7 +51,7 @@ config.set_options = function(opts)
 	config.apps = opts.apps
 end
 
--- NOTE: tested app targets
+---@type table<string, ESRunnerTarget>
 config.targets = {}
 config.targets["aftereffects"] = {
 	app = "After Effects",
