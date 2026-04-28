@@ -50,7 +50,10 @@ commands.run_script = function(range)
 		local appname, instance, version, locale = utils.parse_target_specifier(target_specifier)
 
 		if appname == nil or not utils.validate_target_specifier(appname) then
-			vim.notify(string.format("Invalid target '%s'.", appname), vim.log.levels.ERROR)
+			vim.notify(
+				string.format("Invalid target '%s'. See `:help esrunner.targets`.", appname),
+				vim.log.levels.ERROR
+			)
 			return
 		end
 

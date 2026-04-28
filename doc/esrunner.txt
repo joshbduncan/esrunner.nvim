@@ -4,7 +4,6 @@
 
 |esrunner.nvim| is a plugin for running ExtendScript scripts for Adobe
 applications from within Neovim.
- 
 
 Features:
     - Can detect app specifiers (specific app, version, etc.)
@@ -13,7 +12,7 @@ Features:
 
 esrunner.setup({opts})                                      *esrunner.setup()*
     Setup function to be run by user. Configures the defaults, and application
-    targets .
+    targets.
 
     Usage:
     >
@@ -38,8 +37,8 @@ esrunner.setup({opts})                                      *esrunner.setup()*
     execute_on_single_matches: ~
         Skip the `vim.ui.select` prompt on exact app version match (or when
 	only a single app is available to pick).
-        
-	Default: false
+
+	Default: true
 
     Required keys for {opts.apps}
 
@@ -47,11 +46,11 @@ esrunner.setup({opts})                                      *esrunner.setup()*
 	The file system path to your application.
 
 	NOTE: Most often, Adobe applications are installed into either the
-	base Application directory `/Application/` or your user Application
+	base Application directory `/Applications/` or your user Application
 	directory `~/Applications/`.
 
     version: ~
-	The version identifer (e.g. 24.6.4) of the app.
+	The version identifier (e.g. 24.6.4) of the app.
 
     Example Application Configuration:
 >
@@ -67,10 +66,10 @@ COMMANDS                                                   *esrunner.commands*
 
 `:ESRunner run` (or just `:ESRunner`) will present a |vim.ui.select| prompt
 allowing you to pick a pre-configured application to execute code from the
-current buffer. If the commands is executed in |visual| mode, only the
+current buffer. If the command is executed in |visual| mode, only the
 selected code will be executed.
 
-NOTE: If a `target name` specifier is found in the script the the available
+NOTE: If a `target name` specifier is found in the script, the available
 apps to choose from will be limited to any matching the specifier. If a
 `version` is also specified and a matching application version is defined in
 your config, ESRunner will skip the application select prompt and immediately
@@ -84,10 +83,31 @@ https://extendscript.docsforadobe.dev/interapplication-communication\
 /application-and-namespace-specifiers.html#application-specifiers
 
 `:ESRunner find_apps` uses the Apple System Profiler to find any supported
-application installed on your system. This cna be helpful if you are unsure of
+application installed on your system. The output is displayed as a
+ready-to-paste Lua config snippet. This can be helpful if you are unsure of
 the installation path of your application.
 
 `:ESRunner validate_apps` ensures your |esrunner.setup| configured application
 paths are correct.
 
+==============================================================================
+TARGETS                                                     *esrunner.targets*
+
+The following target identifiers are valid for use in `#target` and
+`//@target` preprocessor directives:
+
+    - `aftereffects`
+    - `illustrator`
+    - `indesign`
+    - `photoshop`
+
+Example:
+>
+    //@target illustrator
+    alert("hello from Illustrator");
+<
+A version specifier can be appended with a hyphen:
+>
+    //@target illustrator-29.1.0
+<
  vim:tw=78:ts=8:noet:ft=help:norl:

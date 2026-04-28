@@ -85,3 +85,7 @@ If you are having trouble and need help determining your installed Adobe applica
 
 > [!WARNING]
 > Depending on your system, it may take a few moments for `:ESRunner find_apps` to finish.
+
+## Documentation
+
+Full documentation is available within Neovim via `:help esrunner`.
